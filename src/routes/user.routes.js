@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { loginUser, registerUser } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import {uploadMulter}  from "../middlewares/multer.middleware.js";
+import { logoutUser } from "../controllers/user.controller.js";
 
 const router=Router();
 
 
 router.route("/register").post(
     
-    upload.fields([
+    uploadMulter.fields([
        {
         name:"avatar",
         maxCount:1
@@ -26,4 +28,4 @@ router.route("/logout").post( verifyJWT,  logoutUser)
 
 
 
-export default router;
+export default router
