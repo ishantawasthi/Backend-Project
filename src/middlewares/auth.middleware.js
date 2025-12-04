@@ -10,14 +10,27 @@ import { User } from "../models/user.model.js"
 export const verifyJWT= asyncHandler (async(req,_,next)=>{
 
  try{
-       const token =  req.cookies?.accessToken ||  req.headers?.("authorization")?.replace("Bearer ","")
+      
+
+         const token = req.cookies?.accessToken ||
+              (req.header("Authorization")?.startsWith("Bearer ")
+                ? req.header("Authorization").split(" ")[1]
+                : req.header("Authorization"))
+
+
+                 
+
     if(!token){
         throw new ApiError(401,"Unauthorized access , no token found")
     }
 
       const decodeToken= jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
 
-       const user=  await User.findById(decodeToken?._id).select("-password -refreshToken")
+        
+
+       const user=  await User.findById(decodeToken?.userId).select("-password -refreshToken")
+
+        
 
        if(!user){
         // TODO : discuss about frontend 
@@ -28,7 +41,12 @@ export const verifyJWT= asyncHandler (async(req,_,next)=>{
        next();
  }
     catch(error){
-        throw new ApiError(401,"Unauthorized access , invalid  access token")   
+
+          
+          
+         
+        throw new ApiError(401,"Unauthorized access , invalid  access token",error.message)   
+       
     }
 })
 

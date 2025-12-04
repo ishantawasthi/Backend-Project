@@ -189,7 +189,7 @@ const registerUser = asyncHandler(async (req, res) => {
     //  fin the user in database
     // password check 
     // access and refresh token generate
-    // send cookies
+    // send cookies  
 
 
         const {email,username,password}=req.body;
@@ -215,7 +215,7 @@ const registerUser = asyncHandler(async (req, res) => {
              const loggedInUser =   await   User.findById(user._id).select("-password -refreshToken");
              const options={
                 httpOnly:true,  
-                secure:true
+                 secure:false
              }
               return  res.status(200)
               .cookie("accessToken",accessToken,options)
@@ -236,17 +236,18 @@ const registerUser = asyncHandler(async (req, res) => {
    const    logoutUser=  asyncHandler(async(req,res)=>{
 
        await  User.findByIdAndUpdate(
-        req.user._id
+       req.user._id
+ 
         ,{
-            $set:{
-                refreshToken:undefined
+              $set:{
+                refreshToken:undefined //  this remove the field from mongodb
             }
         },
         {  new:true, }
        )
        const options={
         httpOnly:true,  
-        secure:true,  
+        secure:false
        }
        return res.status(200)
        .clearCookie("accessToken",options)
@@ -254,7 +255,7 @@ const registerUser = asyncHandler(async (req, res) => {
        .json(
         new ApiResponse(
             200,
-            null,
+            {},
             "User logged out successfully"
         )
        )
