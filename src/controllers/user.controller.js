@@ -240,7 +240,7 @@ const registerUser = asyncHandler(async (req, res) => {
  
         ,{
               $set:{
-                refreshToken:undefined //  this remove the field from mongodb
+                refreshToken:1 //  this remove the field from mongodb
             }
         },
         {  new:true, }
@@ -573,9 +573,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
       ])
 
-        
-
-
       return res
       .status(200)
       .json( new ApiResponse(
@@ -583,12 +580,6 @@ const registerUser = asyncHandler(async (req, res) => {
         {watchHistory:user.watchHistory},
             " User watch history fetched successfully"
               ))
-
-
-
-
-
-
 
      })
 
