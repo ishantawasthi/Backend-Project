@@ -10,29 +10,29 @@ const toggleSubscription = asyncHandler(async (req, res) => {
     const { channelId } = req.params
     const subscriberId = req.user._id
 
-    // 1️⃣ validate channelId
+    // 1 validate channelId
     if (!isValidObjectId(channelId)) {
         throw new ApiError(400, "Invalid channel id")
     }
 
-    // 2️⃣ prevent self-subscription
+    // 2 prevent self-subscription
     if (channelId.toString() === subscriberId.toString()) {
         throw new ApiError(400, "You cannot subscribe to your own channel")
     }
 
-    // 3️⃣ check channel exists
+    // 3 check channel exists
     const channel = await User.findById(channelId)
     if (!channel) {
         throw new ApiError(404, "Channel not found")
     }
 
-    // 4️⃣ check existing subscription
+    // 4 check existing subscription
     const existingSubscription = await Subscription.findOne({
         subscriber: subscriberId,
         channel: channelId
     })
 
-    // 5️⃣ toggle logic
+    // 5 toggle logic
     if (existingSubscription) {
         await existingSubscription.deleteOne()
 
@@ -41,7 +41,7 @@ const toggleSubscription = asyncHandler(async (req, res) => {
         )
     }
 
-    // 6️⃣ create subscription
+    // 6 create subscription
     await Subscription.create({
         subscriber: subscriberId,
         channel: channelId
