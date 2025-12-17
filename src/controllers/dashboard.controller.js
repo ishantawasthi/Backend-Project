@@ -21,15 +21,10 @@ const getChannelStats = asyncHandler(async (req, res) => {
     // (Here: only logged-in user can see their own channel stats)
     // already handled by auth middlewar
 
-
-
-
       // total videos fetched from database
      const totalVideos= await Video.countDocuments({
         owner: channelId
     })
-
-
 
        // total subscribers fetched from database
      const totalSubscribers= await Subscription.countDocuments({
